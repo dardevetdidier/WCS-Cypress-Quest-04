@@ -2,10 +2,11 @@
 
 describe("Upload and Download File Suite tests", () => {
     beforeEach(() => {
-        cy.visit("https://filebin.net/")
+        cy.visit("/")
     })
 
     let filePath = "images/road.jpg";
+    const url = Cypress.config("baseUrl")
 
     it("Upload file and Download it in Zip Format", () => {
         cy.get("#fileField").attachFile(filePath)
@@ -13,7 +14,8 @@ describe("Upload and Download File Suite tests", () => {
         cy.contains("Download files").click();
         cy.contains("Zip").invoke('attr', 'href').then(downloadLink => {
             cy.log(downloadLink)
-            cy.downloadFile(`https://filebin.net${downloadLink}`,'myDownloads/zipFiles','myImageFromCypress.zip');
+            cy.log(Cypress.config("baseUrl"))
+            cy.downloadFile(`${url}${downloadLink}`,'myDownloads/zipFiles','myImageFromCypress.zip');
             cy.readFile('myDownloads/zipFiles/myImageFromCypress.zip')
         })
     })
@@ -24,7 +26,7 @@ describe("Upload and Download File Suite tests", () => {
         cy.contains("Download files").click();
         cy.contains("Tar").invoke('attr', 'href').then(downloadLink => {
             cy.log(downloadLink)
-            cy.downloadFile(`https://filebin.net${downloadLink}`,'myDownloads/tarFiles','myImageFromCypress.tar');
+            cy.downloadFile(`${url}${downloadLink}`,'myDownloads/tarFiles','myImageFromCypress.tar');
             cy.readFile('myDownloads/tarFiles/myImageFromCypress.tar')
         })
     })
